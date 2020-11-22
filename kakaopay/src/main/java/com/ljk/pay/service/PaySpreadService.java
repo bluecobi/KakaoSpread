@@ -46,4 +46,7 @@ public class PaySpreadService {
 		return paySpreadMapper.selectSpreadFriend(dto);
 	}
 	
+	public int checkTakeCount(SpreadDto dto) throws Exception {
+		return paySpreadMapper.checkTakeCount(dto);
+	}
 }
