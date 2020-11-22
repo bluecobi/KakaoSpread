@@ -47,6 +47,8 @@ public class PaySpreadController {
 		String tokenId = "";
 		
 		try {
+			validationParam(paramDto);
+			
 			int _userId = getUserIdFromHead(headers);
 			String _roomId = getRoomIdFromHead(headers);
 			
@@ -145,7 +147,7 @@ public class PaySpreadController {
 	
 	private int getUserIdFromHead(HttpHeaders headers) throws Exception {
 		String errorCode = "CODE:291";
-		String errorMsg  = "OpenAPI-Take Money-GetUserId From Header";
+		String errorMsg  = "OpenAPI-Spread Money-GetUserId From Header";
 		
 		List<String> _userIds = headers.get("X-USER-ID");
 		int _userId = -1;
@@ -164,7 +166,7 @@ public class PaySpreadController {
 	
 	private String getRoomIdFromHead(HttpHeaders headers) throws Exception {
 		String errorCode = "CODE:293";
-		String errorMsg  = "OpenAPI-Take Money-GetRoomId From Header";
+		String errorMsg  = "OpenAPI-Spread Money-GetRoomId From Header";
 		
 		List<String> _roomIds = headers.get("X-ROOM-ID");
 		String _roomId;
@@ -179,6 +181,22 @@ public class PaySpreadController {
 		}
 		
 		return _roomId;
+	}
+	
+	private void validationParam(ParamDto paramDto) throws Exception {
+		String errorCode = "CODE:250";
+		String errorMsg  = "OpenAPI-Spread Money-Validation";
+		
+		if(paramDto.getSpreadAmounts() <= 0) {
+			errorCode = "CODE:251";
+			errorMsg = "마이너스 금액은 뿌릴수가 없습니다.";
+			throw new AppException(null,  "[Error: " + errorCode + "] " + errorMsg);
+		}
+		else if (paramDto.getFriendCnt() <= 0) {
+			errorCode = "CODE:252";
+			errorMsg = "대상을 0보다 큰 값으로 설정하세요.";
+			throw new AppException(null,  "[Error: " + errorCode + "] " + errorMsg);
+		}
 	}
 	
 }
