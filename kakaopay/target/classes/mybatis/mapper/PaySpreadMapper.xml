@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ljk.pay.mapper.PaySpreadMapper">
+
+    <delete id="deleteAllSpread">
+        DELETE FROM SPREAD
+    </delete>
+    
+    <delete id="deleteAllSpreadFriend">
+        DELETE FROM SPREAD_FRIEND
+    </delete>
+    
+    <insert id="createSpread" parameterType="com.ljk.pay.dto.SpreadDto">
+        INSERT INTO SPREAD(SPREAD_ID, OWNER_ID, ROOM_ID, TOKEN_ID, SPREAD_AMOUNTS, FRIEND_CNT, REG_ID, REG_DATE, UPD_ID, UPD_DATE)
+                    VALUES(#{spreadId}, #{ownerId}, #{roomId}, #{tokenId}, #{spreadAmounts}, #{friendCnt}, 0, now(), 0, now())
+    </insert>
+    
+    <update id="createSpreadDtl" parameterType="com.ljk.pay.dto.SpreadDto">
+        INSERT SPREAD_FRIEND (SPREAD_ID, FRIEND_ID, ALLOCATED_AMOUNT, GET_YN, REG_ID, REG_DATE, UPD_ID, UPD_DATE)
+        SELECT #{spreadId}, USER_ID, #{spreadAmounts}, 'N', 0, NOW(), 0, NOW() 
+          FROM ROOM 
+         WHERE ROOM_ID = #{roomId}
+           AND USER_ID != #{ownerId}
+    </update>
+    
+    <select id="getSpread" parameterType="com.ljk.pay.dto.SpreadDto" resultType="com.ljk.pay.dto.SpreadDto">
+       SELECT S.SPREAD_ID as spreadId, S.OWNER_ID as ownerId, S.ROOM_ID as roomId, 
+              S.SPREAD_AMOUNTS as spreadAmounts, S.FRIEND_CNT as friendCnt,
+              TIMESTAMPDIFF(MINUTE, S.REG_DATE, NOW()) as diffMin,
+              (SELECT SUM(F.ALLOCATED_AMOUNT) FROM SPREAD_FRIEND F WHERE F.SPREAD_ID = S.SPREAD_ID AND F.GET_YN = 'Y') AS takenTotalAmount,
+              REG_ID as regId, REG_DATE as regDate, UPD_ID as updId, UPD_DATE as updDate
+         FROM SPREAD S
+        WHERE 1 = 1
+          <if test="ownerId != -1">
+            AND OWNER_ID = #{ownerId}
+          </if>
+          <if test="roomId != null">
+		    AND ROOM_ID = #{roomId}
+		  </if>
+		  AND TOKEN_ID = #{tokenId}
+    </select>
+    
+    <update id="takeMoney" parameterType="com.ljk.pay.dto.SpreadFriendDto">
+        UPDATE SPREAD_FRIEND
+           SET GET_YN = 'Y'
+              ,UPD_ID = #{friendId}
+              ,UPD_DATE = NOW()
+         WHERE SPREAD_ID = #{spreadId}
+           AND FRIEND_ID = #{friendId}
+           AND GET_YN = #{getYn}
+           AND TIMESTAMPDIFF(SECOND, REG_DATE, NOW()) <![CDATA[<=]]> (60*10)
+    </update>
+    
+    <select id="getSpreadFriend" parameterType="com.ljk.pay.dto.SpreadFriendDto" resultType="com.ljk.pay.dto.SpreadFriendDto">
+       SELECT SPREAD_ID as spreadId, FRIEND_ID as friendId, ALLOCATED_AMOUNT as allocatedAmount, 
+              GET_YN as getYn, TIMESTAMPDIFF(SECOND, REG_DATE, NOW()) AS diffSec, 
+              REG_ID as regId, REG_DATE as regDate, UPD_ID as updId, UPD_DATE as updDate
+         FROM SPREAD_FRIEND
+        WHERE SPREAD_ID = #{spreadId}
+            AND FRIEND_ID = #{friendId}
+    </select>
+    
+    <select id="selectSpreadFriend" parameterType="com.ljk.pay.dto.SpreadFriendDto" resultType="com.ljk.pay.dto.SpreadFriendDto">
+       SELECT SPREAD_ID as spreadId, FRIEND_ID as friendId, ALLOCATED_AMOUNT as allocatedAmount, 
+              GET_YN as getYn, TIMESTAMPDIFF(SECOND, REG_DATE, NOW()) AS diffSec, 
+              REG_ID as regId, REG_DATE as regDate, UPD_ID as updId, UPD_DATE as updDate
+         FROM SPREAD_FRIEND
+        WHERE SPREAD_ID = #{spreadId}
+		    AND GET_YN = #{getYn}
+    </select>
+
+</mapper>

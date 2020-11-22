@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ljk.pay.mapper.PayRoomMapper">
+    
+    <select id="selectRoom" parameterType="com.ljk.pay.dto.RoomDto" resultType="com.ljk.pay.dto.RoomDto">
+         SELECT ROOM_ID as roomId, USER_ID as userId, REG_ID as regId, REG_DATE as regDate, UPD_ID as updId, UPD_DATE as updDate
+           FROM ROOM 
+          WHERE ROOM_ID = #{roomId}
+            AND USER_ID != #{userId}
+    </select>
+    
+    <delete id="deleteAllRoom">
+        DELETE FROM ROOM
+    </delete>
+    
+    <insert id="createAllRoom" parameterType="java.util.List">
+        INSERT INTO ROOM(ROOM_ID, USER_ID, REG_ID, REG_DATE, UPD_ID, UPD_DATE)
+                   VALUES
+                   <foreach separator="," item="item" collection="list">
+                   ("${item.roomId}", "${item.userId}", 0, now(), 0, now())
+                   </foreach>
+    </insert>
+</mapper>
