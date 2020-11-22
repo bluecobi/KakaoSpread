@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ljk.pay.mapper.PayUserMapper">
+    
+    <delete id="deleteAllUser">
+        DELETE FROM USER
+    </delete>
+    
+    <insert id="createAllUser" parameterType="java.util.List">
+        INSERT INTO USER(USER_ID, AMOUNTS, REG_ID, REG_DATE, UPD_ID, UPD_DATE)
+                   VALUES
+                   <foreach separator="," item="item" collection="list">
+                   ("${item.userId}", "${item.amounts}", 0, now(), 0, now())
+                   </foreach>
+    </insert>
+    
+    <update id="updateUser" parameterType="com.ljk.pay.dto.UserDto">
+        UPDATE USER
+           SET AMOUNTS = #{amounts}
+         WHERE USER_ID = #{userId}
+    </update>
+    
+    <update id="changeAmount" parameterType="com.ljk.pay.dto.UserDto">
+        UPDATE USER
+           SET AMOUNTS = AMOUNTS + #{amounts}
+              ,UPD_ID = #{userId}
+              ,UPD_DATE = now()
+         WHERE USER_ID = #{userId}
+    </update>
+
+</mapper>
