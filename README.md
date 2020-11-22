@@ -51,6 +51,7 @@
 |Money Take|상동|X-USER-ID(2), X-ROOM-ID(RoomID-001)|{ "tokenId": "임의의 TokenID" }|JSON|오류3:Token이 정확하지 않을 경우|
 |Money Take|상동|X-USER-ID(2), X-ROOM-ID(임의의 방)|{ "tokenId": "생성된 TokenID" }|JSON|오류4:참여한 방이 정확하지 않을 경우|
 |Money Take|상동|X-USER-ID(999), X-ROOM-ID(RoomID-001)|{ "tokenId": "생성된 TokenID" }|JSON|오류5:권한이 없는 사용자 접근|
+|Money Take|상동|X-USER-ID(3), X-ROOM-ID(RoomID-001)|{ "tokenId": "생성된 TokenID" }|JSON|오류6:뿌린 대상보다 많은 사람이 수령하려고 할 경우|
 |View|http://localhost:8080/openapi/viewSpread|X-USER-ID(0)|{ "tokenId": "생성된 TokenID" }|JSON|정상:금액을 뿌린 당사자, 정확한 TokenId|
 |View|상동|X-USER-ID(0)|{ "tokenId": "생성된 TokenID" }|JSON|오류1:기간 경과-7일 이후 테스트|
 |View|상동|X-USER-ID(0)|{ "tokenId": "임의의 TokenID" }|JSON|오류2:Token이 정확하지 않을 경우|
