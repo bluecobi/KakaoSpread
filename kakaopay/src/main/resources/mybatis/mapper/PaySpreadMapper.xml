@@ -70,5 +70,9 @@
         WHERE SPREAD_ID = #{spreadId}
 		    AND GET_YN = #{getYn}
     </select>
+	
+    <select id="checkTakeCount" parameterType="com.ljk.pay.dto.SpreadDto" resultType="java.lang.Integer">
+       SELECT (SELECT COUNT(A.GET_YN) FROM SPREAD_FRIEND A WHERE A.SPREAD_ID = #{spreadId} AND A.GET_YN = 'Y') <![CDATA[<]]> (SELECT FRIEND_CNT FROM SPREAD WHERE SPREAD_ID = #{spreadId} )
+    </select>
 
 </mapper>
