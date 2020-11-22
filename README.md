@@ -26,7 +26,7 @@
 |Table|SPREAD|Money를 뿌린 기본 테이블|
 |Table|SPREAD_FRIEND|뿌린 돈을 수령할 수 있는 친구 목록|
 |Table|SEQUENCE|일련번호를 관리하기 위한 테이블|
-|Function|Sequence를 증가 시키기 위한 함수|   
+|Function|nextval|Sequence를 증가 시키기 위한 함수|   
 
 3. Test를 위한 Postman 스크립트 (SharedLink)
    - https://www.getpostman.com/collections/0b94d06da80134c2ceab   
@@ -53,7 +53,6 @@
 |View|상동|X-USER-ID(0)|{ "tokenId": "임의의 TokenID" }|JSON|오류2:Token이 정확하지 않을 경우|
 |View|상동|X-USER-ID(2)|{ "tokenId": "생성된 TokenID" }|JSON|오류3:권한이 없는 사용자 요청|
 |View|상동|X-USER-ID(999)|{ "tokenId": "생성된 TokenID" }|JSON|오류4:없는 사용자 요청|
-
 
 ## 핵심 문제 해결 전략   
 
