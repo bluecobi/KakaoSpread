@@ -22,4 +22,6 @@ public interface PaySpreadMapper {
 	public SpreadFriendDto getSpreadFriend(SpreadFriendDto dto) throws Exception;
 	
 	public List<SpreadFriendDto> selectSpreadFriend(SpreadFriendDto dto) throws Exception;
+	
+	public int checkTakeCount(SpreadDto dto) throws Exception;
 }
