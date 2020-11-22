@@ -31,6 +31,9 @@
 3. Test를 위한 Postman 스크립트 (SharedLink)
    - https://www.getpostman.com/collections/0b94d06da80134c2ceab   
 
+4. 환경 파일
+   - Database 접속 정보 관리 : /Kakaopay/src/main/resources/static/property/config.properties
+
 ## API 설명 (HTTP Method는 POST로 통일)   
 |기능|url|HEADER 정보 및 Sample|Parameter Sample|전송 Type|설명|
 |---|---|---|---|---|---|
